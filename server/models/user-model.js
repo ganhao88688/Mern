@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
 const { Schema } = mongoose;
+const bcrypt = require("bcrypt");
 const userSchema = new Schema({
   userName: {
     type: String,
@@ -35,9 +35,20 @@ userSchema.method.isStudent = function () {
 userSchema.method.isInstructor = function () {
   return this.role == "Instructor";
 };
+userSchema.method.comparePassword = async function (passWord, cb) {
+  let same = await bcrypt.compare(passWord, this.passWord);
+  return cb(null, same);
+};
 
 //mongoose middleware
-userSchema.pre("save", async function (next)=>{
-    // this代表mongooseDB的document
-    if(this.isNew || this.isModified("password"))
-})
+//若使用者是新用戶或正在更改密碼，則將密碼hash
+userSchema.pre("save", async function (next) {
+  // this代表mongoDB內的document
+  if (this.isNew || this.isModified("password")) {
+    let hashValue = await bcrypt.hash(this.passWord, 10);
+    this.passWord = hashValue;
+  }
+  next();
+});
+
+module.exports = mongoose.model("User", userSchema);

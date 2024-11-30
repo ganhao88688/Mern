@@ -5,7 +5,7 @@ const {
   loginValidation,
 } = require("../validation");
 const userSchema = require("../models/user-model");
-const courceSchema = require("../models/cource-model");
+const courceSchema = require("../models/course-model");
 const jwt = require("jsonwebtoken");
 
 router.use((req, res, next) => {
@@ -57,7 +57,7 @@ router.post("/login", async (req, res) => {
     }
   });
 });
-router.post("/cource", async (req, res) => {
+router.post("/createCource", async (req, res) => {
   //correct data format
   let data = courseValidation(res.body);
   if (data.error) return res.status(400).send(data.error.details[0].message);
@@ -73,5 +73,7 @@ router.post("/cource", async (req, res) => {
     return res.status(400).send("save failed!");
   }
 });
+//end course
+//buy course
 
 module.exports = router;

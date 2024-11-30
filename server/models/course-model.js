@@ -25,4 +25,4 @@ const courceSchema = new Schema({
   },
 });
 
-module.exports = mongoose.model("Cource", courceSchema);
+module.exports = mongoose.model("course", courceSchema);

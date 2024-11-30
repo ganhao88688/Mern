@@ -4,8 +4,7 @@ const {
   registerValidation,
   loginValidation,
 } = require("../validation");
-const userSchema = require("../models/user-model");
-const courceSchema = require("../models/course-model");
+const userSchema = require("../models").user;
 const jwt = require("jsonwebtoken");
 
 router.use((req, res, next) => {
@@ -57,22 +56,7 @@ router.post("/login", async (req, res) => {
     }
   });
 });
-router.post("/createCource", async (req, res) => {
-  //correct data format
-  let data = courseValidation(res.body);
-  if (data.error) return res.status(400).send(data.error.details[0].message);
-  //no same id in data
-  let foundID = courceSchema.findOne({ id: data.id });
-  if (foundID) return res.status(400).send("This class is already in data.");
-  //store course data
-  try {
-    let saved = await new courceSchema(data.data);
-    return res.status(200).send("saved success!");
-  } catch (error) {
-    console.log(error);
-    return res.status(400).send("save failed!");
-  }
-});
+
 //end course
 //buy course
 

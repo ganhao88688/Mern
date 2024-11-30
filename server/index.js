@@ -8,7 +8,7 @@ const authRoute = require("./routes").auth;
 //連結mongoDB
 mongoose
   .connect("mongodb://127.0.0.1:27017/mernDB")
-  .then(() => console.log("connected to mmongoDB..."))
+  .then(() => console.log("connected to mongoDB..."))
   .catch((e) => console.log(e));
 
 app.use(express.json());

@@ -20,7 +20,7 @@ const userSchema = new Schema({
   },
   role: {
     type: String,
-    enum: ["Student", "Instructor"],
+    enum: ["Student", "instructor"],
     require: true,
   },
   date: {
@@ -29,15 +29,20 @@ const userSchema = new Schema({
   },
 });
 //instance methods
-userSchema.method.isStudent = function () {
+userSchema.methods.isStudent = function () {
   return this.role == "Student";
 };
-userSchema.method.isInstructor = function () {
+userSchema.methods.isInstructor = function () {
   return this.role == "Instructor";
 };
-userSchema.method.comparePassword = async function (passWord, cb) {
-  let same = await bcrypt.compare(passWord, this.passWord);
-  return cb(null, same);
+userSchema.methods.comparePassword = async function (passWord, cb) {
+  let isMatch;
+  try {
+    isMatch = await bcrypt.compare(passWord, this.passWord);
+    return cb(null, isMatch);
+  } catch (e) {
+    return cb(e, isMatch);
+  }
 };
 
 //mongoose middleware

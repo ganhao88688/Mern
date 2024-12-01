@@ -29,12 +29,13 @@ router.post("/createCource", async (req, res) => {
       price,
       instructor: req.user._id,
     });
-    let savedCourse = await newCourse.saved(); //同個使用者有多個課程不會出錯嗎?不是primary key?
+    let savedCourse = await newCourse.save(); //同個使用者有多個課程不會出錯嗎?不是primary key?
     return res.send({
       message: "新課程已保存",
       savedCourse,
     });
   } catch (e) {
+    console.log(e);
     return res.status(500).send("創建課程失敗...");
   }
 });

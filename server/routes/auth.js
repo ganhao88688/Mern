@@ -22,7 +22,7 @@ router.post("/register", async (req, res) => {
   let usedEmail = await userSchema.findOne({ email: data.value.email });
   if (usedEmail) return res.status(400).send("This email has used.");
   //store user data
-  let newUser = new user(req.body);
+  let newUser = new userSchema(req.body);
   try {
     let saved = await newUser.save();
     return res.send("regiter success!");

@@ -23,7 +23,12 @@ router.post("/createCource", async (req, res) => {
   //save
   let { title, description, price } = req.body;
   try {
-    let newCourse = { title, description, price, instructor: req.user._id };
+    let newCourse = new courceSchema({
+      title,
+      description,
+      price,
+      instructor: req.user._id,
+    });
     let savedCourse = await newCourse.saved(); //同個使用者有多個課程不會出錯嗎?不是primary key?
     return res.send({
       message: "新課程已保存",

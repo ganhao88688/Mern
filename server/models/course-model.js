@@ -17,7 +17,7 @@ const courceSchema = new Schema({
   },
   instructor: {
     type: mongoose.Schema.Types.ObjectId, //primary key
-    ref: "User", //try "user"
+    ref: "user", //mongoDB有users(collection)
   },
   students: {
     type: [String],

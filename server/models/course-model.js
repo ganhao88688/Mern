@@ -7,7 +7,7 @@ const courceSchema = new Schema({
     type: String,
     require: true,
   },
-  decription: {
+  description: {
     type: String,
     require: true,
   },

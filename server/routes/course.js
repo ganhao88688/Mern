@@ -1,12 +1,9 @@
 const router = require("express").Router();
-const { Router } = require("express");
 const {
   courseValidation,
   registerValidation,
   loginValidation,
 } = require("../validation");
-const { validate } = require("../models/user-model");
-const { object } = require("joi");
 const courceSchema = require("../models").course;
 
 router.use((req, res, next) => {
@@ -22,7 +19,7 @@ router.get("/", async (req, res) => {
     .exec();
   return res.send(found);
 });
-//find course with id
+//find course
 router.get("/:_id", async (req, res) => {
   let { _id } = req.params;
   try {
@@ -67,20 +64,50 @@ router.post("/createCource", async (req, res) => {
 });
 //modify course information
 router.patch("/patch/:_id", async (req, res) => {
-  let data = courseValidation(req.body);
-  if (data.error) return res.status(400).send(data.error.details[0].message);
+  let validateResult = courseValidation(req.body);
+  if (validateResult.error)
+    return res.status(400).send(validateResult.error.details[0].message);
   //unique id in mongosh
   let { _id } = req.params;
   try {
-    let found = courceSchema.find({ _id });
+    let found = await courceSchema.findOne({ _id });
     if (!found) return res.status(400).send("請先新增課程。");
-    console.log(object.keys(req));
-    // if(found.instructor.equals)
+
+    if (found.instructor.equals(req.user._id)) {
+      let updatedCourse = await courceSchema.findOneAndUpdate(
+        { _id },
+        req.body,
+        {
+          new: true,
+          runValidators: true,
+        }
+      );
+      return res.send({ message: "修改成功", updatedCourse });
+    } else {
+      return res.status(403).send("你不是該課程的講師!");
+    }
   } catch (e) {
+    console.log(e);
     return res.status(500).send(e);
   }
+});
+// has data in mongosh
+router.delete("/deleteCourse/:_id", async (req, res) => {
+  let { _id } = req.params;
+  try {
+    let found = await courceSchema.findOne({ _id });
+    if (!found) return res.status(400).send("找不到該課程。");
 
-  let change = courceSchema.updateOne({ _id }, data);
+    if (found.instructor.equals(req.user._id)) {
+      await courceSchema.deleteOne({ _id });
+      return res.send("刪除成功");
+    } else {
+      return res.status(403).send("你不是該課程的講師!");
+    }
+  } catch (e) {
+    console.log(e);
+    return res.status(500).send(e);
+  }
 });
 //add user into course
 //kick somebody out

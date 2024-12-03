@@ -22,4 +22,13 @@ app.use(
   passport.authenticate("jwt", { session: false }),
   courseRoute
 );
-app.listen(8080, () => console.log("listening at port 8080"));
+let now = new Date();
+let date = `0${now.getDate()}`.slice(-2);
+let minutes = `0${now.getMinutes()}`.slice(-2);
+app.listen(8080, () =>
+  console.log(
+    `listening at port 8080 at ${
+      now.getMonth() + 1
+    }/${date} ${now.getHours()}:${minutes}`
+  )
+);

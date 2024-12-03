@@ -6,6 +6,7 @@ const {
   loginValidation,
 } = require("../validation");
 const { validate } = require("../models/user-model");
+const { object } = require("joi");
 const courceSchema = require("../models").course;
 
 router.use((req, res, next) => {
@@ -64,13 +65,22 @@ router.post("/createCource", async (req, res) => {
     return res.status(500).send("創建課程失敗...");
   }
 });
+//modify course information
 router.patch("/patch/:_id", async (req, res) => {
-  let data = validate(req.body);
+  let data = courseValidation(req.body);
   if (data.error) return res.status(400).send(data.error.details[0].message);
   //unique id in mongosh
   let { _id } = req.params;
-  let found = courceSchema.find({ _id });
-  if (!found) return res.status(400).send("請先新增課程。");
+  try {
+    let found = courceSchema.find({ _id });
+    if (!found) return res.status(400).send("請先新增課程。");
+    console.log(object.keys(req));
+    // if(found.instructor.equals)
+  } catch (e) {
+    return res.status(500).send(e);
+  }
+
+  let change = courceSchema.updateOne({ _id }, data);
 });
 //add user into course
 //kick somebody out

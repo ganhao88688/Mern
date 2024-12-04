@@ -6,6 +6,7 @@ dotenv.config();
 const { auth: authRoute, course: courseRoute } = require("./routes");
 const passport = require("passport");
 require("./config/passport")(passport);
+const cors = require("corse");
 
 //連結mongoDB
 mongoose
@@ -15,6 +16,7 @@ mongoose
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 app.use("/api/user", authRoute);
 //courseRoute 應該被jwt保護
 app.use(

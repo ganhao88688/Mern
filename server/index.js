@@ -6,7 +6,7 @@ dotenv.config();
 const { auth: authRoute, course: courseRoute } = require("./routes");
 const passport = require("passport");
 require("./config/passport")(passport);
-const cors = require("corse");
+const cors = require("cors");
 
 //連結mongoDB
 mongoose

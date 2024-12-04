@@ -1,11 +1,36 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import AuthService from "../services/auth.service";
+import AuthService from "../services/auth.services";
+import axios from "axios";
 
 const LoginComponent = (props) => {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [passWord, setPassWord] = useState("");
+  const [errMessage, setErrMessage] = useState("");
+
+  const handleChangeEmail = (e) => {
+    setEmail(e.target.value);
+  };
+  const handleChangePassword = (e) => {
+    setPassWord(e.target.value);
+  };
+  const handleLogin = async () => {
+    try {
+      let response = await AuthService.login(email, passWord);
+      console.log(response);
+      localStorage.setItem("user", JSON.stringify(response.data));
+      window.alert("登入成功，重新導向到個人頁面~");
+      navigate("/profile");
+    } catch (e) {
+      setErrMessage(e.response.data);
+    }
+  };
+
   return (
     <div style={{ padding: "3rem" }} className="col-md-12">
       <div>
+        {errMessage && <div className="alert alert-danger">{errMessage}</div>}
         <div className="form-group">
           <label htmlFor="username">電子信箱：</label>
           <input

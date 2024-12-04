@@ -1,9 +1,40 @@
 import React, { useState } from "react";
+import AuthService from "../services/auth.services";
 
 const RegisterComponent = () => {
+  const [userName, setUserName] = useState("");
+  const [email, setEmail] = useState("");
+  const [passWord, setPassword] = useState("");
+  const [role, setRole] = useState("");
+  const [errMessage, setErrMessage] = useState("");
+
+  const handleChangeUsername = (e) => {
+    setUserName(e.target.value);
+  };
+  const handleChangeEmail = (e) => {
+    setEmail(e.target.value);
+  };
+  const handleChangePassword = (e) => {
+    setPassword(e.target.value);
+  };
+  const handleChangeRole = (e) => {
+    setRole(e.target.value);
+  };
+  const handleRegister = () => {
+    AuthService.register(userName, email, passWord, role)
+      .then(() => {
+        window.alert("註冊成功，重新導向到登入頁面");
+        //重新導向
+      })
+      .catch((e) => {
+        // console.log(e);
+        setErrMessage(e.response.data);
+      });
+  };
   return (
     <div style={{ padding: "3rem" }} className="col-md-12">
       <div>
+        {errMessage && <div className="alert alert-danger">{errMessage}</div>}
         <div>
           <label htmlFor="username">用戶名稱:</label>
           <input
@@ -38,7 +69,7 @@ const RegisterComponent = () => {
         <div className="form-group">
           <label htmlFor="password">身份：</label>
           <input
-            onChange={handleChnageRole}
+            onChange={handleChangeRole}
             type="text"
             className="form-control"
             placeholder="只能填入student或是instructor這兩個選項其一"

@@ -1,7 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import AuthServices from "../services/auth.services";
+import { useNavigate } from "react-router-dom";
 
 const NavComponent = () => {
+  const navigate = useNavigate();
+  const logoutHandler = () => {
+    AuthServices.logout();
+  };
   return (
     <div>
       <nav>
@@ -40,7 +46,7 @@ const NavComponent = () => {
                 </li>
 
                 <li className="nav-item">
-                  <Link className="nav-link" to="/">
+                  <Link onClick={logoutHandler} className="nav-link" to="/">
                     登出
                   </Link>
                 </li>

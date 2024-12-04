@@ -52,7 +52,7 @@ router.post("/login", async (req, res) => {
         user: foundUser,
       });
     } else {
-      res.status(401).send("Wrong PassWord!");
+      res.status(401).send("Wrong Password!");
     }
   });
 });

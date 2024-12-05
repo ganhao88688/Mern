@@ -19,7 +19,7 @@ router.get("/", async (req, res) => {
     .exec();
   return res.send(found);
 });
-//find course
+//find course with class id
 router.get("/:_id", async (req, res) => {
   let { _id } = req.params;
   try {
@@ -31,6 +31,24 @@ router.get("/:_id", async (req, res) => {
   } catch (e) {
     console.log(e);
     return res.status(500).send(e);
+  }
+});
+//find course with instructor id
+router.post("/instructor/:_id", async (req, res) => {
+  try {
+    let { _id } = req.params;
+    let found = await courceSchema
+      .find({ _id })
+      .populate("instructor", ["username", "email"])
+      .exec();
+    if (!found) return res.status(404).send("找不到符合id的課程");
+    return res.send({
+      message: `找到${found.estimatedDocumentCount()}筆資料`,
+      found,
+    });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).send("some bugs...");
   }
 });
 router.post("/createCource", async (req, res) => {

@@ -1,6 +1,4 @@
-const ProfileComponent = (props) => {
-  let { currentUser, setCurrentUser } = props;
-
+const ProfileComponent = ({ currentUser }) => {
   return (
     <div style={{ padding: "3rem" }}>
       {!currentUser && <div>在獲取您的個人資料之前，您必須先登錄。</div>}
@@ -12,7 +10,7 @@ const ProfileComponent = (props) => {
             <tbody>
               <tr>
                 <td>
-                  <strong>姓名：{currentUser.user.username}</strong>
+                  <strong>姓名：{currentUser.user.userName}</strong>
                 </td>
               </tr>
               <tr>

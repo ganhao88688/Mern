@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthService from "../services/auth.services";
-import axios from "axios";
 
-const LoginComponent = (props) => {
+const LoginComponent = ({ setCurrentUser }) => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [passWord, setPassWord] = useState("");
@@ -18,9 +17,10 @@ const LoginComponent = (props) => {
   const handleLogin = async () => {
     try {
       let response = await AuthService.login(email, passWord);
-      console.log(response);
+      // console.log(response);
       localStorage.setItem("user", JSON.stringify(response.data));
       window.alert("登入成功，重新導向到個人頁面~");
+      setCurrentUser(AuthService.getCurrentUser());
       navigate("/profile");
     } catch (e) {
       setErrMessage(e.response.data);

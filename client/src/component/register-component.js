@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import AuthService from "../services/auth.services";
+import { useNavigate } from "react-router-dom";
 
 const RegisterComponent = () => {
   const [userName, setUserName] = useState("");
@@ -7,6 +8,7 @@ const RegisterComponent = () => {
   const [passWord, setPassword] = useState("");
   const [role, setRole] = useState("");
   const [errMessage, setErrMessage] = useState("");
+  const navigate = useNavigate();
 
   const handleChangeUsername = (e) => {
     setUserName(e.target.value);
@@ -25,6 +27,7 @@ const RegisterComponent = () => {
       .then(() => {
         window.alert("註冊成功，重新導向到登入頁面");
         //重新導向
+        navigate("/");
       })
       .catch((e) => {
         // console.log(e);
@@ -41,7 +44,7 @@ const RegisterComponent = () => {
             onChange={handleChangeUsername}
             type="text"
             className="form-control"
-            name="username"
+            name="userame"
           />
         </div>
         <br />
@@ -72,7 +75,7 @@ const RegisterComponent = () => {
             onChange={handleChangeRole}
             type="text"
             className="form-control"
-            placeholder="只能填入student或是instructor這兩個選項其一"
+            placeholder="只能填入Student或是Instructor這兩個選項其一"
             name="role"
           />
         </div>

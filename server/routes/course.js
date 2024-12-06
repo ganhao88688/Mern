@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const { object } = require("joi");
 const {
   courseValidation,
   registerValidation,
@@ -34,16 +35,17 @@ router.get("/:_id", async (req, res) => {
   }
 });
 //find course with instructor id
-router.post("/instructor/:_id", async (req, res) => {
+router.get("/instructor/:_id", async (req, res) => {
   try {
+    console.log("find courses with instructor id...");
     let { _id } = req.params;
     let found = await courceSchema
-      .find({ _id })
+      .find({ instructor: _id })
       .populate("instructor", ["username", "email"])
       .exec();
     if (!found) return res.status(404).send("找不到符合id的課程");
     return res.send({
-      message: `找到${found.estimatedDocumentCount()}筆資料`,
+      // message: `找到${Object.keys(found).length}筆資料`,
       found,
     });
   } catch (e) {
@@ -51,7 +53,26 @@ router.post("/instructor/:_id", async (req, res) => {
     return res.status(500).send("some bugs...");
   }
 });
-router.post("/createCource", async (req, res) => {
+//find course with studnet id
+router.get("/studnet/:_id", async (req, res) => {
+  try {
+    let { _id } = req.params;
+    let found = await courceSchema
+      .find({ students: _id })
+      .populate("instructor", ["username", "email"])
+      .exec();
+    if (!found) return res.status(404).send("找不到符合id的課程");
+    return res.send({
+      message: `找到${Object.keys(found).length}筆資料`,
+      found,
+    });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).send("some bugs...");
+  }
+});
+
+router.post("/createCourse", async (req, res) => {
   //check data format
   let data = courseValidation(req.body);
   if (data.error) return res.status(400).send(data.error.details[0].message);

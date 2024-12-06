@@ -1,13 +1,13 @@
 import axios from "axios";
-
 const API_URL = "http://localhost:8080/api/courses";
-class courseService {
-  post(title, description, price) {
+
+class CourseService {
+  newCourse(title, description, price) {
     let token = "";
-    let tokenInSession = localStorage.getItem("user").token;
-    if (tokenInSession) token = JSON.parse(tokenInSession);
+    let tokenInSession = localStorage.getItem("user");
+    if (tokenInSession) token = JSON.parse(tokenInSession).token;
     return axios.post(
-      API_URL,
+      API_URL + "createCource",
       { title, description, price },
       {
         headers: {
@@ -16,11 +16,23 @@ class courseService {
       }
     );
   }
-  get(_id) {
+  getCourseFromStudent(_id) {
     let token = "";
-    let tokenInSession = localStorage.getItem("user").token;
-    if (tokenInSession) token = JSON.parse(tokenInSession);
+    let tokenInSession = localStorage.getItem("user");
+    if (tokenInSession) token = JSON.parse(tokenInSession).token;
 
+    return axios.post(API_URL + "/student/" + _id, {
+      headers: {
+        Authorization: token,
+      },
+    });
+  }
+
+  getCourseFromInstructor(_id) {
+    let token = "";
+    let tokenInSession = localStorage.getItem("user");
+    if (tokenInSession) token = JSON.parse(tokenInSession).token;
+    // console.log(`_id:${_id}, token=${token}`);
     return axios.get(API_URL + "/instructor/" + _id, {
       headers: {
         Authorization: token,
@@ -29,4 +41,4 @@ class courseService {
   }
 }
 
-export default new courseService();
+export default new CourseService();

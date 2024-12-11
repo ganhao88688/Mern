@@ -20,10 +20,11 @@ router.get("/", async (req, res) => {
     .exec();
   return res.send(found);
 });
-//find course with class id
-router.get("/:_id", async (req, res) => {
-  let { _id } = req.params;
+//find course with course id
+router.get("/fcwid/:_id", async (req, res) => {
   try {
+    console.log("in fcwId");
+    let { _id } = req.params;
     let found = await courceSchema
       .find({ _id })
       .populate("instructor", ["email"])
@@ -34,10 +35,25 @@ router.get("/:_id", async (req, res) => {
     return res.status(500).send(e);
   }
 });
-//find course with instructor id
-router.get("/instructor/:_id", async (req, res) => {
+//find course with course name
+router.get("/fcwn/:title", async (req, res) => {
   try {
-    console.log("find courses with instructor id...");
+    console.log("in fcwName");
+    let title = this.param.title;
+    console.log(title);
+    let founded = await courceSchema
+      .find({ title })
+      .populate("instructor", ["userName", "email"]);
+    if (!founded) return res.status(404).send("not found");
+    return res.send(founded);
+  } catch (e) {
+    return res.status(500).send("some error");
+  }
+});
+//find course with instructor id
+router.get("/fcwii/:_id", async (req, res) => {
+  try {
+    console.log("in find courses with instructor id...");
     let { _id } = req.params;
     let found = await courceSchema
       .find({ instructor: _id })
@@ -56,6 +72,7 @@ router.get("/instructor/:_id", async (req, res) => {
 //find course with studnet id
 router.get("/studnet/:_id", async (req, res) => {
   try {
+    console.log("in find course with student id");
     let { _id } = req.params;
     let found = await courceSchema
       .find({ students: _id })
@@ -71,18 +88,18 @@ router.get("/studnet/:_id", async (req, res) => {
     return res.status(500).send("some bugs...");
   }
 });
-
 router.post("/createCourse", async (req, res) => {
-  //check data format
-  let data = courseValidation(req.body);
-  if (data.error) return res.status(400).send(data.error.details[0].message);
-  //is instructor
-  if (req.user.isStudent()) {
-    return res.status(400).send("只有講師才可以發布課程!");
-  }
-  //save
-  let { title, description, price } = req.body;
   try {
+    //check data format
+    console.log("in createCourse");
+    let data = courseValidation(req.body);
+    if (data.error) return res.status(400).send(data.error.details[0].message);
+    //is instructor
+    if (req.user.isStudent()) {
+      return res.status(400).send("只有講師才可以發布課程!");
+    }
+    //save
+    let { title, description, price } = req.body;
     let newCourse = new courceSchema({
       title,
       description,
@@ -103,12 +120,13 @@ router.post("/createCourse", async (req, res) => {
 });
 //modify course information
 router.patch("/patch/:_id", async (req, res) => {
-  let validateResult = courseValidation(req.body);
-  if (validateResult.error)
-    return res.status(400).send(validateResult.error.details[0].message);
-  //unique id in mongosh
-  let { _id } = req.params;
   try {
+    console.log("in modify course");
+    let validateResult = courseValidation(req.body);
+    if (validateResult.error)
+      return res.status(400).send(validateResult.error.details[0].message);
+    //unique id in mongosh
+    let { _id } = req.params;
     let found = await courceSchema.findOne({ _id });
     if (!found) return res.status(400).send("請先新增課程。");
 
@@ -132,8 +150,9 @@ router.patch("/patch/:_id", async (req, res) => {
 });
 // has data in mongosh
 router.delete("/deleteCourse/:_id", async (req, res) => {
-  let { _id } = req.params;
   try {
+    console.log("in delete course");
+    let { _id } = req.params;
     let found = await courceSchema.findOne({ _id });
     if (!found) return res.status(400).send("找不到該課程。");
 

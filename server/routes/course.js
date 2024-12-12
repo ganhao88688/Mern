@@ -39,8 +39,8 @@ router.get("/fcwid/:_id", async (req, res) => {
 router.get("/fcwn/:title", async (req, res) => {
   try {
     console.log("in fcwName");
-    let title = this.param.title;
-    console.log(title);
+    let title = req.params.title; //req.params可以用this.param代替?
+    console.log(`title:${title}`);
     let founded = await courceSchema
       .find({ title })
       .populate("instructor", ["userName", "email"]);

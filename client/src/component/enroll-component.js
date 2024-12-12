@@ -13,7 +13,16 @@ const EnrollComponent = ({ currentUser }) => {
     setSearchInput(e.target.value);
   };
   const handleSearch = () => {
-    CourseService.getCourseByName(searchInput)
+    let result;
+    let search = searchInput;
+    while (search[0] == " ") search = search.substring(1);
+    if (!search) {
+      result = CourseService.getAllCourses();
+    } else {
+      result = CourseService.getCoursesByName(search);
+      console.log(`searchInput is not empty`);
+    }
+    result
       .then((data) => {
         console.log(data);
         setSearchResult(data.data);
@@ -35,6 +44,7 @@ const EnrollComponent = ({ currentUser }) => {
 
   return (
     <div style={{ padding: "3rem" }}>
+      {/* 沒有登入 */}
       {!currentUser && (
         <div>
           <p>You must login first before searching for courses.</p>
@@ -46,11 +56,13 @@ const EnrollComponent = ({ currentUser }) => {
           </button>
         </div>
       )}
+      {/* 是教師 */}
       {currentUser && currentUser.user.role == "Instructor" && (
         <div>
           <h1>Only students can enroll in courses.</h1>
         </div>
       )}
+      {/* 是學生 */}
       {currentUser && currentUser.user.role == "Student" && (
         <div className="search input-group mb-3">
           <input
@@ -63,6 +75,7 @@ const EnrollComponent = ({ currentUser }) => {
           </button>
         </div>
       )}
+      {/* 有搜尋結果 */}
       {currentUser && searchResult && searchResult.length != 0 && (
         <div>
           <p>我們從 API 返回的數據。</p>

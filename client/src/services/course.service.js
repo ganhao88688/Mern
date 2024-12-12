@@ -21,7 +21,7 @@ class CourseService {
     let tokenInSession = localStorage.getItem("user");
     if (tokenInSession) token = JSON.parse(tokenInSession).token;
 
-    return axios.post(API_URL + "/student/" + _id, {
+    return axios.get(API_URL + "/student/" + _id, {
       headers: {
         Authorization: token,
       },

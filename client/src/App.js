@@ -33,6 +33,14 @@ function App() {
             path="course"
             element={<CourseComponent currentUser={currentUser} />}
           />
+          <Route
+            path="postCourse"
+            element={<CourseComponent currentUser={currentUser} />}
+          />
+          <Route
+            path="enroll"
+            element={<CourseComponent currentUser={currentUser} />}
+          />
         </Route>
       </Routes>
     </BrowserRouter>

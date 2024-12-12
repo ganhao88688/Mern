@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CourseService from "../services/course.service";
 
-const EnrollComponent = (props) => {
-  let { currentUser, setCurrentUser } = props;
+const EnrollComponent = ({ currentUser }) => {
   const navigate = useNavigate();
   let [searchInput, setSearchInput] = useState("");
   let [searchResult, setSearchResult] = useState(null);
@@ -47,12 +46,12 @@ const EnrollComponent = (props) => {
           </button>
         </div>
       )}
-      {currentUser && currentUser.user.role == "instructor" && (
+      {currentUser && currentUser.user.role == "Instructor" && (
         <div>
           <h1>Only students can enroll in courses.</h1>
         </div>
       )}
-      {currentUser && currentUser.user.role == "student" && (
+      {currentUser && currentUser.user.role == "Student" && (
         <div className="search input-group mb-3">
           <input
             onChange={handleChangeInput}

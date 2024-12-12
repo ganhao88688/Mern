@@ -70,7 +70,7 @@ router.get("/fcwii/:_id", async (req, res) => {
   }
 });
 //find course with studnet id
-router.get("/studnet/:_id", async (req, res) => {
+router.get("/student/:_id", async (req, res) => {
   try {
     console.log("in find course with student id");
     let { _id } = req.params;

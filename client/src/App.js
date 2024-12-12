@@ -8,6 +8,7 @@ import { useState } from "react";
 import AuthServices from "./services/auth.services";
 import CourseComponent from "./component/course-component";
 import PostCourseComponent from "./component/postCourse-component";
+import EnrollComponent from "./component/enroll-component";
 
 function App() {
   const [currentUser, setCurrentUser] = useState(AuthServices.getCurrentUser());
@@ -44,12 +45,8 @@ function App() {
             }
           />
           <Route
-            path="postCourse"
-            element={<CourseComponent currentUser={currentUser} />}
-          />
-          <Route
             path="enroll"
-            element={<CourseComponent currentUser={currentUser} />}
+            element={<EnrollComponent currentUser={currentUser} />}
           />
         </Route>
       </Routes>

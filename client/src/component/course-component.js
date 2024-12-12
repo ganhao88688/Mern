@@ -53,7 +53,7 @@ const CourseComponent = ({ currentUser }) => {
           <h1>歡迎來到講師頁面</h1>
         </div>
       )}
-      {currentUser && currentUser.user.role == "Studnet" && (
+      {currentUser && currentUser.user.role == "Student" && (
         <div>
           <h1>歡迎來到學生頁面</h1>
         </div>

@@ -8,10 +8,15 @@ const CourseComponent = ({ currentUser }) => {
     navigate("/login");
   };
   const [courseData, setCourseData] = useState(null);
-
+  const handleDelete = (index) => {
+    courseService.deleteCourse(courseData[index]._id);
+    courseData.splice(index, 1);
+    setCourseData(courseData); //component不會自動更新 騙我!!!
+  };
   useEffect(() => {
     let _id = currentUser.user._id;
     if (currentUser.user.role == "Instructor") {
+      // console.log("getCourse from client");
       courseService
         .getCourseFromInstructor(_id)
         .then((data) => {
@@ -56,7 +61,7 @@ const CourseComponent = ({ currentUser }) => {
       {currentUser && courseData && courseData.length != 0 && (
         <div>
           <div style={{ display: "flex", flexWrap: "wrap" }}>
-            {courseData.map((course) => {
+            {courseData.map((course, index) => {
               return (
                 <div
                   className="card"
@@ -71,6 +76,14 @@ const CourseComponent = ({ currentUser }) => {
                       學生人數: {course.students.length}
                     </p>
                     <p style={{ argin: "0.5rem 0rem" }}>價格: {course.price}</p>
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => {
+                        handleDelete(index);
+                      }}
+                    >
+                      刪除課程
+                    </button>
                   </div>
                 </div>
               );

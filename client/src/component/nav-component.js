@@ -8,7 +8,7 @@ const NavComponent = ({ currentUser, setCurrentUser }) => {
     window.alert("已經登出，將重新導向到首頁!");
     setCurrentUser(null);
   };
-  console.log(`currentUser: ${currentUser}`);
+  // console.log(`currentUser: ${currentUser}`);
   return (
     <div>
       <nav>

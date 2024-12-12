@@ -22,7 +22,7 @@ const PostCourseComponent = (props) => {
     setPrice(e.target.value);
   };
   const postCourse = () => {
-    CourseService.post(title, description, price)
+    CourseService.newCourse(title, description, price)
       .then(() => {
         window.alert("新課程已創建成功");
         navigate("/course");
@@ -46,14 +46,14 @@ const PostCourseComponent = (props) => {
           </button>
         </div>
       )}
-      {currentUser && currentUser.user.role !== "instructor" && (
+      {currentUser && currentUser.user.role !== "Instructor" && (
         <div>
           <p>只有講師可以發布新課程。</p>
         </div>
       )}
-      {currentUser && currentUser.user.role == "instructor" && (
+      {currentUser && currentUser.user.role == "Instructor" && (
         <div className="form-group">
-          <label for="exampleforTitle">課程標題：</label>
+          <label form="exampleforTitle">課程標題：</label>
           <input
             name="title"
             type="text"
@@ -62,7 +62,7 @@ const PostCourseComponent = (props) => {
             onChange={handleChangeTitle}
           />
           <br />
-          <label for="exampleforContent">內容：</label>
+          <label form="exampleforContent">內容：</label>
           <textarea
             className="form-control"
             id="exampleforContent"
@@ -71,7 +71,7 @@ const PostCourseComponent = (props) => {
             onChange={handleChangeDesciption}
           />
           <br />
-          <label for="exampleforPrice">價格：</label>
+          <label form="exampleforPrice">價格：</label>
           <input
             name="price"
             type="number"

@@ -19,8 +19,8 @@ class CourseService {
   }
   getAllCourses() {
     let token = "";
-    if (localStorage.getItem("user"))
-      token = JSON.parse(localStorage.getItem("user")).token;
+    let tokenInSession = localStorage.getItem("user");
+    if (tokenInSession) token = JSON.parse(tokenInSession).token;
     return axios.get(API_URL, {
       headers: {
         Authorization: token,
@@ -88,6 +88,20 @@ class CourseService {
         headers: { Authorization: token.token },
       });
     }
+  }
+  enroll(_id) {
+    let token = "";
+    let tokenInSession = localStorage.getItem("user");
+    if (tokenInSession) token = JSON.parse(tokenInSession).token;
+    return axios.patch(
+      API_URL + "/patch/" + _id,
+      {},
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
   }
 }
 
